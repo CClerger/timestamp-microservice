@@ -44,9 +44,10 @@ app.use(function(req, res, next){
     "unix": null,
     "natural": null
   };
-  if (!isNaN(parseInt(potentialDate))) {
-    var actualDate = new Date(parseInt(potentialDate));
-    result.unix = potentialDate;
+  var potentialTimestamp = parseInt(potentialDate);
+  if (!isNaN(potentialTimestamp)) {
+    var actualDate = new Date(potentialTimestamp);
+    result.unix = potentialTimestamp;
     result.natural = actualDate.toDateString();
   } else {
     potentialDate = potentialDate.replace(/%20/gi, ' ');
