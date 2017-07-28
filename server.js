@@ -47,8 +47,11 @@ app.use(function(req, res, next){
   var potentialTimestamp = parseInt(potentialDate);
   if (!isNaN(potentialTimestamp)) {
     var actualDate = new Date(potentialTimestamp);
-    result.unix = potentialTimestamp;
-    result.natural = actualDate.toDateString();
+    var dateString = actualDate.toDateString();
+    if (dateString !== 'Invalid Date') {
+      result.unix = potentialTimestamp;
+      result.natural = dateString;
+    }
   } else {
     potentialDate = potentialDate.replace(/%20/gi, ' ');
     if (!isNaN(Date.parse(potentialDate))) {
