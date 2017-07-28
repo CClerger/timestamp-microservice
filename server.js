@@ -35,13 +35,30 @@ app.route('/_api/package.json')
   
 app.route('/')
     .get(function(req, res) {
-		  res.sendFile(process.cwd() + '/views/index.html');
-    })
+        res.sendFile(process.cwd() + '/views/index.html');
+    });
 
-// Respond not found to all the wrong routes
 app.use(function(req, res, next){
-  res.status(404);
-  res.type('txt').send('Not found');
+  var potentialDate = req.path.substring(1);
+  var result = {
+    "unix": null,
+    "natural": null
+  };
+  if (!isNaN(parseInt(potentialDate))) {
+    var actualDate = new Date(parseInt(potentialDate));
+    result.unix = potentialDate;
+    result.natural = actualDate.toDateString();
+  } else {
+    potentialDate = potentialDate.replace(/%20/gi, ' ');
+    if (!isNaN(Date.parse(potentialDate))) {
+      var actualDate = new Date(potentialDate);
+      result.unix = actualDate.getTime();
+      result.natural = potentialDate;
+    }
+  }
+  res.end(JSON.stringify(result));
+  /*res.status(404);
+  res.type('txt').send('Not found');*/
 });
 
 // Error Middleware
